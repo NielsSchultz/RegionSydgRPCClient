@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegionSydgRPCClient", "RegionSydgRPCClient\RegionSydgRPCClient.csproj", "{10BC7B63-47A5-4EA3-A19D-1BF57CA1B725}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10BC7B63-47A5-4EA3-A19D-1BF57CA1B725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10BC7B63-47A5-4EA3-A19D-1BF57CA1B725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10BC7B63-47A5-4EA3-A19D-1BF57CA1B725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10BC7B63-47A5-4EA3-A19D-1BF57CA1B725}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D1355361-9358-4DEA-A15B-7F064CD0CBA1}
+	EndGlobalSection
+EndGlobal

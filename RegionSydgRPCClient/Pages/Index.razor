@@ -1,0 +1,28 @@
+﻿@using Protos;
+@using Grpc.Net.Client;
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_SendInfo())"></button>
+
+
+
+@code {
+
+    private HelloReply model = new ();
+    string serveraddress = "https://localhost:7143/";
+    protected async Task OnClick_SendInfo()
+    {
+        using var channel = GrpcChannel.ForAddress(serveraddress, new GrpcChannelOptions
+    {
+        HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+    });
+        var client = new Protos.Patient.PatientClient(channel);
+        model = await client.SaysHelloAsync(
+                          new Protos.HelloRequest {Name = "test" });
+
+        var test = 0;
+    }
+    
+}
