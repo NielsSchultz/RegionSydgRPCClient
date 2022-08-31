@@ -4,18 +4,28 @@ option csharp_namespace = "Protos";
 
 package patient;
 
-// The greeting service definition.
+// The patient service definition.
 service Patient {
-  // Sends a greeting
-  rpc SaysHello (HelloRequest) returns (HelloReply);
+  // Sends the cpr of the patient
+  rpc SendInfo (CprHeartRate) returns (IsNominalResponse);
+  rpc AskForHelp (HelpRequest) returns (Response);
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+// The request message containing the user's cpr and heartrate requesting is within normal parameters.
+message CprHeartRate {
+  string cpr = 1;
+  int32 heartrate = 2;
+}
+// The request message containing the user's cpr who is asking for assistance.
+message HelpRequest {
+	string cpr = 1;
+}
+// The response message containing the either confirming the message is received or confirming heart is within normal parameters.
+message Response {
+  bool received = 1;
 }
 
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+// The response message containing the either confirming the message is received or confirming heart is within normal parameters.
+message IsNominalResponse {
+  bool isNominal = 1;
 }
