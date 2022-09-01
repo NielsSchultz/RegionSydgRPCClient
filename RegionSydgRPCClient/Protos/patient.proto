@@ -20,12 +20,12 @@ message CprHeartRate {
 message HelpRequest {
 	string cpr = 1;
 }
-// The response message containing the either confirming the message is received or confirming heart is within normal parameters.
+// The response message containing the either confirming the message is received.
 message Response {
   bool received = 1;
 }
 
-// The response message containing the either confirming the message is received or confirming heart is within normal parameters.
+// The response message containing confirmation of whether heartrate is within normal parameters.
 message IsNominalResponse {
   bool isNominal = 1;
 }

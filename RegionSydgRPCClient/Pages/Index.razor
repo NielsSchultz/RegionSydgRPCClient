@@ -3,30 +3,53 @@
 @page "/"
 
 <PageTitle>Index</PageTitle>
-<label>Indtast Cpr nummer:</label>
-@if (alert)
+@if (cpr.Length < 3)
 {
-    <h1>Din puls er udenfor de normale værdier, personalet er undervejs!</h1>
+    <div>
+        <label>Indtast Cpr nummer:</label>
+        <input placeholder="Indtast Sengeafsnit og nr" class="form-control" @bind-value="cpr" />
+        <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_EnterCpr())">Ok</button>
+    </div>
+}
+else
+{
+    <h1>@message</h1>
+
+    @if (!help)
+    {
+        <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_AskForHelp())">Hjælp</button>
+    }
+    else{
+        <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_StopAskForHelp())">Hjælp er ankommet</button>
+    }
+
+    <br />
+    @if (!isStarted)
+    {
+        <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_StartSendInfo())">Start Monitorering</button>
+    }
+    else
+    {
+        <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_StopSendInfo())">Stop Monitorering</button>
+        <h4>Din puls er: @heartRate</h4>
+        alert = false;
+    }
+    <br />
+    
 }
 
-<input placeholder="Indtast Cpr" class="form-control" @bind-value="cpr" />
-<button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_AskForHelp())">Hjælp</button>
-@if (!isStarted)
-{
-    <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_StartSendInfo())">Start</button>
-}
-else{
-    <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_StopSendInfo())">Stop</button>
-}
-<br />
-<label>@heartRate</label>
+
+
+
 
 
 @code {
+    public string message = "";
     public bool alert;
     public string cpr = "";
     public bool isStarted = false;
     public int heartRate = new();
+    public bool help;
     public Random rnd = new();
     private Response helpResponse = new();
     private IsNominalResponse heartRateResponse = new();
@@ -34,14 +57,18 @@ else{
     protected async Task OnClick_AskForHelp()
     {
         using var channel = GrpcChannel.ForAddress(serveraddress, new GrpcChannelOptions
-    {
-        HttpHandler = new GrpcWebHandler(new HttpClientHandler())
-    });
+            {
+                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+            });
         var client = new Protos.Patient.PatientClient(channel);
         helpResponse = await client.AskForHelpAsync(
                           new Protos.HelpRequest { Cpr = cpr });
 
-        var test = 0;
+        if (helpResponse.Received)
+        {
+            help = true;
+            message = "Personalet har modtaget din anmodning om hjælp og er på vej!";
+        }
     }
     protected async Task OnClick_StartSendInfo()
     {
@@ -51,39 +78,53 @@ else{
                 HttpHandler = new GrpcWebHandler(new HttpClientHandler())
             });
         var client = new Protos.Patient.PatientClient(channel);
-        while(isStarted){
+        while (isStarted)
+        {
 
             heartRateResponse = await client.SendInfoAsync(
                               new Protos.CprHeartRate { Cpr = cpr, Heartrate = await GetHeartRate() });
             if (!heartRateResponse.IsNominal)
             {
-                StateHasChanged();
+                message = "Din puls er udenfor de normale værdier, personalet er undervejs!";
                 alert = true;
+                StateHasChanged();
                 break;
             }
-            await Task.Delay(5000);
-            var test1 = 0;
             StateHasChanged();
+            await Task.Delay(2000);
+
         }
 
+    }
 
-        var test = 0;
+    protected async void OnClick_StopAskForHelp()
+    {
+        message = "";
+        help = false;
+        StateHasChanged();
+
+    }
+
+    protected async void OnClick_EnterCpr()
+    {
+        StateHasChanged();
+
     }
 
     protected async void OnClick_StopSendInfo()
     {
-
         isStarted = false;
         StateHasChanged();
 
     }
-    protected async Task<int> GetHeartRate(){
-        
+    protected async Task<int> GetHeartRate()
+    {
+
         await Task.Run(() =>
         {
             heartRate = rnd.Next(58, 142);
         });
         return heartRate;
     }
-    
+
 }
