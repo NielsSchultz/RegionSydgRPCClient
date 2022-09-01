@@ -9,6 +9,7 @@ service Patient {
   // Sends the cpr of the patient
   rpc SendInfo (CprHeartRate) returns (IsNominalResponse);
   rpc AskForHelp (HelpRequest) returns (Response);
+  rpc RequestTelemetrics (DepartmentNumber) returns (TelemetricResponse);
 }
 
 // The request message containing the user's cpr and heartrate requesting is within normal parameters.
@@ -16,13 +17,31 @@ message CprHeartRate {
   string cpr = 1;
   int32 heartrate = 2;
 }
+
 // The request message containing the user's cpr who is asking for assistance.
 message HelpRequest {
 	string cpr = 1;
 }
+
 // The response message containing the either confirming the message is received.
 message Response {
   bool received = 1;
+}
+
+// The request message containing the departmentnumber that you wish to monitor.
+message DepartmentNumber {
+  int32 departmentnumber = 1;
+}
+
+//The response message
+message TelemetricResponse{
+	repeated Telemetrics telemetrics = 1;
+}
+
+// The class containing infomation for the telemetrics response
+message Telemetrics {
+  string bed = 1;
+  bool alert = 2;
 }
 
 // The response message containing confirmation of whether heartrate is within normal parameters.
