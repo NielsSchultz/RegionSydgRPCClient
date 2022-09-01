@@ -6,8 +6,8 @@
 @if (cpr.Length < 3)
 {
     <div>
-        <label>Indtast Cpr nummer:</label>
-        <input placeholder="Indtast Sengeafsnit og nr" class="form-control" @bind-value="cpr" />
+        <label>Indtast Sengenummer:</label>
+        <input placeholder="Indtast Sengenummer" class="form-control" @bind-value="cpr" />
         <button class="btn btn-primary align-content-center float-center" @onclick="@(g => OnClick_EnterCpr())">Ok</button>
     </div>
 }
@@ -78,7 +78,7 @@ else
         {
 
             heartRateResponse = await client.SendInfoAsync(
-                              new Protos.CprHeartRate { Cpr = cpr, Heartrate = await GetHeartRate() });
+                              new Protos.HeartRate { Bednumber = cpr, Heartrate = await GetHeartRate() });
             if (!heartRateResponse.IsNominal)
             {
                 message = "Din puls er udenfor de normale værdier, personalet er undervejs!";
