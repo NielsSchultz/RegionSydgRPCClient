@@ -5,6 +5,7 @@ package patient;
 service Patient {
   rpc SendInfo (HeartRate) returns (IsNominalResponse);
   rpc AskForHelp (HelpRequest) returns (Response);
+  rpc StopAskForHelp (HelpRequest) returns (Response);
   rpc AddBed (HelpRequest) returns (Response);
   rpc RequestTelemetrics (DepartmentNumber) returns (TelemetricResponse);
 }

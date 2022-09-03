@@ -99,6 +99,13 @@ else
     {
         message = "";
         help = false;
+        using var channel = GrpcChannel.ForAddress(serveraddress, new GrpcChannelOptions
+            {
+                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+            });
+        var client = new Protos.Patient.PatientClient(channel);
+        var received = await client.StopAskForHelpAsync(
+                          new Protos.HelpRequest { Bednumber = cpr });
         StateHasChanged();
 
     }
@@ -120,6 +127,13 @@ else
     {
         message = "";
         isStarted = false;
+        using var channel = GrpcChannel.ForAddress(serveraddress, new GrpcChannelOptions
+            {
+                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+            });
+        var client = new Protos.Patient.PatientClient(channel);
+        var received = await client.StopAskForHelpAsync(
+                          new Protos.HelpRequest { Bednumber = cpr });
         StateHasChanged();
 
     }
