@@ -3,7 +3,7 @@
 @page "/"
 
 <PageTitle>Index</PageTitle>
-@if (cpr.Length < 3)
+@if (!isStarted1)
 {
     <div>
         <label>Indtast Sengenummer:</label>
@@ -43,7 +43,9 @@ else
     public string message = "";
     public bool alert;
     public string cpr = "";
+    public string cpre = "";
     public bool isStarted = false;
+    public bool isStarted1 = false;
     public int heartRate = new();
     public bool help;
     public Random rnd = new();
@@ -103,8 +105,15 @@ else
 
     protected async void OnClick_EnterCpr()
     {
+        isStarted1 = true;
+        using var channel = GrpcChannel.ForAddress(serveraddress, new GrpcChannelOptions
+            {
+                HttpHandler = new GrpcWebHandler(new HttpClientHandler())
+            });
+        var client = new Protos.Patient.PatientClient(channel);
+        helpResponse = await client.AddBedAsync(
+                          new Protos.HelpRequest { Bednumber = cpr });
         StateHasChanged();
-
     }
 
     protected async void OnClick_StopSendInfo()
