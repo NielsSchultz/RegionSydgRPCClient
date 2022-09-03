@@ -5,6 +5,7 @@ package patient;
 service Patient {
   rpc SendInfo (HeartRate) returns (IsNominalResponse);
   rpc AskForHelp (HelpRequest) returns (Response);
+  rpc AddBed (HelpRequest) returns (Response);
   rpc RequestTelemetrics (DepartmentNumber) returns (TelemetricResponse);
 }
 // The request message containing the user's bednumber and heartrate.
@@ -14,7 +15,7 @@ message HeartRate {
 }
 // The request message containing the user's bednumber who is asking for assistance.
 message HelpRequest {
-	string cpr = 1;
+	string bednumber = 1;
 }
 // The response message containing the either confirming the message is received.
 message Response {

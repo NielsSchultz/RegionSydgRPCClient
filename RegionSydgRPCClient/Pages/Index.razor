@@ -58,7 +58,7 @@ else
             });
         var client = new Protos.Patient.PatientClient(channel);
         helpResponse = await client.AskForHelpAsync(
-                          new Protos.HelpRequest { Cpr = cpr });
+                          new Protos.HelpRequest { Bednumber = cpr });
 
         if (helpResponse.Received)
         {
